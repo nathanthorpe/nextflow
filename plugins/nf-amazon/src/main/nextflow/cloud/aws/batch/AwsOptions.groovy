@@ -110,6 +110,10 @@ class AwsOptions implements CloudTransferOptions {
         return env.AWS_MAX_ATTEMPTS ? env.AWS_MAX_ATTEMPTS as int : DEFAULT_AWS_MAX_ATTEMPTS
     }
 
+    protected String getCurrentJobId() {
+        return env.AWS_BATCH_JOB_ID
+    }
+
     protected String getCliPath0(Session session) {
         def result = session.config.navigate('aws.batch.cliPath')
         if( result )

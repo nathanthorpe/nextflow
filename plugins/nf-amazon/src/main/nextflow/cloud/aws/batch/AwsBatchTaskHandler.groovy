@@ -605,6 +605,12 @@ class AwsBatchTaskHandler extends TaskHandler implements BatchHandler<String,Job
         if( vars )
             container.setEnvironment(vars)
 
+        final tags = executor.getJobTags()
+        if( !tags.isEmpty() ) {
+            result.setTags(tags)
+            result.setPropagateTags(true)
+        }
+
         result.setContainerOverrides(container)
 
         return result

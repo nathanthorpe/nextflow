@@ -20,6 +20,8 @@ package nextflow.cloud.aws.batch
 import com.amazonaws.services.batch.AWSBatch
 import com.amazonaws.services.batch.model.DescribeComputeEnvironmentsRequest
 import com.amazonaws.services.batch.model.DescribeJobQueuesRequest
+import com.amazonaws.services.batch.model.DescribeJobsRequest
+import com.amazonaws.services.batch.model.JobDetail
 import com.amazonaws.services.ec2.AmazonEC2
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest
 import com.amazonaws.services.ec2.model.Instance
@@ -132,6 +134,12 @@ class AwsBatchHelper {
 
     private PriceModel getPrice(Instance instance) {
         instance.getInstanceLifecycle()=='spot' ? PriceModel.spot : PriceModel.standard
+    }
+
+    JobDetail getBatchJobInformation(String jobId) {
+        final jobsRequest = new DescribeJobsRequest().withJobs(jobId);
+        final jobResponse = batchClient.describeJobs(jobsRequest) .getJobs() [0]
+        return jobResponse
     }
 
     CloudMachineInfo getCloudInfoByQueueAndTaskArn(String queue, String taskArn) {

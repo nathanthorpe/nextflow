@@ -271,6 +271,17 @@ class AwsBatchExecutor extends Executor implements ExtensionPoint {
         }
     }
 
+    Map<String, String> getJobTags() {
+        final jobId = awsOptions.getCurrentJobId()
+        try {
+            return helper?.getBatchJobInformation(jobId)?.getTags()
+        }
+        catch( Exception e ) {
+            log.warn "Unable to retrieve AWS batch job details for ${jobId} | ${e.message}", e
+            return Collections.emptyMap()
+        }
+    }
+
     @Override
     void shutdown() {
         def tasks = submitter.shutdownNow()
